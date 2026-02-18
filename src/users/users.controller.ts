@@ -33,11 +33,13 @@ export class UsersController {
   }
 
   @Get(':id') //GET method to fetch a user by id /users/:id
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Post() //POST method to create a new /user
+  @UseGuards(JwtAuthGuard)
   create(
     @Body(ValidationPipe)
     createUserDto: CreateUserDto,
@@ -46,6 +48,7 @@ export class UsersController {
   }
 
   @Patch(':id') //PATCH method to update a user by id /users/:id
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
