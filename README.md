@@ -61,6 +61,51 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Database
+.env
+
+DATABASE_URL=
+
+JWT_SECRET=
+```
+{
+  "_id": "64f9b2e3f1a2c4d5e6b7c890",
+  "createdAt": "2026-02-18T07:00:00.000Z",
+  "updatedAt": "2026-02-18T12:30:00.000Z",
+  "email": "johndoe@example.com",
+  "username": "johndoe",
+  "password": "$2b$10$abcdefg1234567890hashedpassword", 
+  "gender": "male",
+  "phone": "+1234567890",
+  "status": "active",
+  "isAdmin": true,
+  "address": "123 Main St, Cityville",
+  "deviceModel": "iPhone 14 Pro",
+  "deviceType": "mobile",
+  "browserName": "Safari",
+  "imageUrl": "https://example.com/avatar.jpg",
+  "lastIP": "192.168.1.100",
+  "lastLogin": "2026-02-18T12:00:00.000Z",
+  "lastUserAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_2 like Mac OS X)",
+  "location": "Cityville, Country",
+  "loginCount": 42,
+  "osName": "iOS 16",
+  "roles": ["user", "editor"],
+  "telegramChatId": null
+}
+
+```
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm 
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
