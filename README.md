@@ -31,7 +31,7 @@
 npm install
 npx prisma
 npx prisma init
-npm i --save @nestjs/config
+npm install prisma @prisma/client
 npx prisma db push
 ```
 
