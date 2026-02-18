@@ -1,0 +1,45 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  username        String   @unique
+  email           String   @unique
+  phone           String?  @default("")
+  dateOfBirth     DateTime?
+  address         String?
+  gender          String
+  note            String?
+  status          String   @default("active")
+  imageUrl        String?
+  telegramChatId  String?
+
+  password        String
+  isAdmin         Boolean  @default(false)
+  roles           String[] @default(["user"])
+
+  loginCount      Int      @default(0)
+  lastLogin       DateTime?
+  lastIP          String?
+  location        String?  @default("")
+
+  lastSeen        DateTime?
+  lastUserAgent   String?
+  deviceType      String   @default("Desktop")
+  deviceModel     String?
+  osName          String?
+  browserName     String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
