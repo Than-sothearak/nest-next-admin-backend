@@ -28,24 +28,24 @@
 ## Project setup
 
 ```bash
-$ npm install
-$ npx prisma
-$ npx prisma init
-$ npm i --save @nestjs/config
-$ npx prisma db push
+npm install
+npx prisma
+npx prisma init
+npm i --save @nestjs/config
+npx prisma db push
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
 ## Run tests
