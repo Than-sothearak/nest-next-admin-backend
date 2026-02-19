@@ -35,11 +35,11 @@ export class AuthController {
 
     return {
       success: true,
+      accessToken: accessToken,
       user: {
         username: user.username,
         email: user.email,
         id: user.id,
-        accessToken: accessToken,
       },
     };
   }
