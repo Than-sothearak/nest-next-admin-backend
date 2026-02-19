@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsOptional,
@@ -9,6 +10,7 @@ import {
   MaxLength,
   IsNotEmpty,
   IsEnum,
+  IsArray,
 } from 'class-validator';
 
 export enum Gender {
@@ -23,19 +25,40 @@ export enum Roles {
 }
 
 export class CreateUserDto {
+  // ---------------- REQUIRED ----------------
+  @ApiProperty({ description: 'Unique username', example: 'john_doe' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
   username: string;
 
+  @ApiProperty({ description: 'User email', example: 'john@example.com' })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Password', example: 'P@ssw0rd123!' })
   @IsString()
-  @MaxLength(20)
-  phone?: string;
+  @IsNotEmpty()
+  password: string;
+
+  @ApiProperty({ enum: Gender, description: 'Gender', example: Gender.MALE })
+  @IsEnum(Gender)
+  gender: Gender;
+
+  @ApiProperty({
+    enum: Roles,
+    isArray: true,
+    description: 'User roles',
+    example: [Roles.USER],
+  })
+  @IsEnum(Roles, { each: true })
+  @IsArray()
+  roles: Roles[];
+
+  // ---------------- OPTIONAL ----------------
+  @IsOptional()
+  phone?: number;
 
   @IsOptional()
   @IsDateString()
@@ -44,16 +67,14 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  address: string;
-
-  @IsEnum(Gender, { message: 'gender must be either male or female' })
-  gender: Gender;
+  address?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(255)
   note?: string;
 
+  @ApiPropertyOptional({ description: 'User status', example: 'active' })
   @IsOptional()
   @IsString()
   status?: string;
@@ -67,18 +88,10 @@ export class CreateUserDto {
   @IsString()
   telegramChatId?: string;
 
-  @IsString()
-  password: string;
-
+  @ApiPropertyOptional({ description: 'Is Admin', example: false })
   @IsOptional()
   @IsBoolean()
   isAdmin?: boolean;
-
-  @IsEnum(Roles, {
-    each: true,
-    message: 'roles must be one of user, admin, or moderator',
-  })
-  roles: Roles[];
 
   @IsOptional()
   @IsInt()

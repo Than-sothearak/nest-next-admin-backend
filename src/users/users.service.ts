@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -19,7 +20,7 @@ export class UsersService {
     });
   }
 
-  async findAll(query?: string, page: number = 1, limit: number = 10) {
+  async findAll(page: number, limit: number, query?: string) {
     const where = query
       ? {
           OR: [
@@ -53,6 +54,9 @@ export class UsersService {
   }
 
   async findOne(id: string) {
+    if (!id || !/^[a-fA-F0-9]{24}$/.test(id)) {
+      throw new BadRequestException('Invalid user ID format');
+    }
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
@@ -92,6 +96,7 @@ export class UsersService {
       const createdUser = await this.prisma.user.create({
         data: {
           ...createUserDto,
+          phone: createUserDto.phone?.toString(),
           password: hashedPassword,
         },
       });
@@ -102,7 +107,7 @@ export class UsersService {
       };
     } catch (error) {
       throw new HttpException(
-        `An error occurred during user creation.+ ${error}`,
+        `An error occurred during user creation. ${String(error)}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -110,21 +115,30 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
+      where: { id: id.toString() },
     });
-    if (user) {
-      return {
-        success: true,
-        message: 'User updated successfully',
-        data: await this.prisma.user.update({
-          where: { id: id },
-          data: { ...updateUserDto },
-        }),
-      };
-    } else {
+
+    if (!user) {
       throw new NotFoundException('User not found');
     }
+
+    const data = {
+      ...updateUserDto,
+      phone:
+        updateUserDto.phone !== undefined
+          ? updateUserDto.phone.toString()
+          : undefined,
+    };
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: id.toString() },
+      data,
+    });
+
+    return {
+      success: true,
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
   }
 }
