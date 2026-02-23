@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CurrentUserData } from './interfaces/current-user.interface';
 
 @Injectable()
 export class AuthService {
@@ -31,11 +32,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const accessToken = this.jwtService.sign({ userId: user.id });
+    const accessToken = this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    } as CurrentUserData);
 
     return {
       accessToken,
-      user,
     };
   }
 

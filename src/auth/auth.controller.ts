@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import type { Response } from 'express'; // ✅ correct import
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './decorator/public.decorator';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -18,13 +19,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @Public()
   @ApiOperation({ summary: 'Admin login' })
   @ApiBody({ type: LoginDto })
   async signIn(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { accessToken, user } = await this.authService.signIn(loginDto);
+    const { accessToken } = await this.authService.signIn(loginDto);
 
     res.cookie('access_token', accessToken, {
       httpOnly: true,
@@ -36,11 +38,6 @@ export class AuthController {
     return {
       success: true,
       accessToken: accessToken,
-      user: {
-        username: user.username,
-        email: user.email,
-        id: user.id,
-      },
     };
   }
 }

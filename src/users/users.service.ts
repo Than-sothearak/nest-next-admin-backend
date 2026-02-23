@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CurrentUserData } from 'src/auth/interfaces/current-user.interface';
 
 @Injectable()
 export class UsersService {
@@ -68,7 +69,7 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, currentUser?: CurrentUserData) {
     const existingUser = await this.prisma.user.findFirst({
       where: {
         OR: [
@@ -102,7 +103,7 @@ export class UsersService {
       });
       return {
         success: true,
-        message: 'User created successfully',
+        message: `User created successfully by ${currentUser?.username}`,
         data: createdUser,
       };
     } catch (error) {

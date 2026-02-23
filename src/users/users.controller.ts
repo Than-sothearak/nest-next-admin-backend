@@ -9,14 +9,13 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,6 +25,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GetUserParamDto } from './dto/get-user-param.dto';
+import { Public } from 'src/auth/decorator/public.decorator';
+import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
+import type { CurrentUserData } from 'src/auth/interfaces/current-user.interface';
 
 @Controller('users')
 @ApiTags('Users')
@@ -33,11 +35,10 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
+  @Public() // <-- This endpoint is public and does not require authentication
   @ApiOperation({
     summary: 'Get all users with pagination and search for testing',
   })
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Users fetched successfully',
@@ -74,7 +75,6 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by ID only for admin' })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   findOne(
     @Param()
@@ -85,20 +85,20 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: 'Create user (admin only)' })
-  // @ApiConsumes('multipart/form-data')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'User successfully created',
   })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @CurrentUser() currentUser: CurrentUserData,
+  ) {
+    return this.userService.create(createUserDto, currentUser);
   }
 
   @Patch() //PATCH method to update a user by id /users/:id
   @ApiOperation({ summary: 'Update user by ID only for admin' })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiQuery({
     name: 'id',
