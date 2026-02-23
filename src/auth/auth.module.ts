@@ -4,9 +4,12 @@ import { AuthController } from './auth.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GoogleAuthController } from './social/google-auth.controller';
+import { GoogleAuthService } from './social/providers/google-auth.service';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -29,7 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController, GoogleAuthController],
+  providers: [AuthService, JwtStrategy, GoogleAuthService, GoogleStrategy],
 })
 export class AuthModule {}

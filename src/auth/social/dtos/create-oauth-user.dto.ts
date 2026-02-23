@@ -24,7 +24,7 @@ export enum Roles {
   MODERATOR = 'moderator',
 }
 
-export class CreateUserDto {
+export class CreateOAuthUserDto {
   // ---------------- REQUIRED ----------------
   @ApiProperty({ description: 'Unique username', example: 'john_doe' })
   @IsString()

@@ -78,6 +78,7 @@ export class UsersService {
         ],
       },
     });
+    let hashedPassword = '';
 
     if (existingUser) {
       throw new HttpException(
@@ -88,10 +89,9 @@ export class UsersService {
       );
     }
 
-    const hashedPassword: string = await bcrypt.hash(
-      createUserDto.password,
-      10,
-    );
+    if (createUserDto.password) {
+      hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    }
 
     try {
       const createdUser = await this.prisma.user.create({
