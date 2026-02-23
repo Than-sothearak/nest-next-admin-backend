@@ -29,8 +29,7 @@
 
 ```bash
 npm install
-npx prisma
-npx prisma init
+npx prisma generate
 npm install prisma @prisma/client
 npx prisma db push
 ```
