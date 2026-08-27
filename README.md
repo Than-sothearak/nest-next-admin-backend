@@ -22,7 +22,22 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+The project provides a modular backend architecture with authentication, user management, database integration, and API security. It uses Prisma ORM for database operations and supports both traditional JWT authentication and Google OAuth 2.0 authentication.
 
+Features
+JWT-based authentication
+Google OAuth 2.0 login
+Secure password hashing with bcrypt
+User registration and login
+User management APIs
+Authentication guards and protected routes
+Current-user access through custom decorators
+Prisma ORM for database management
+Request validation with class-validator
+Swagger API documentation
+Unit and end-to-end testing with Jest
+Environment-based configuration
+Modular NestJS architecture
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Project setup
